@@ -1,0 +1,6 @@
+export DB_HOST="mysql://localhost"
+export DB_PORT="3306"
+export DB_NAME="honey_tip"
+export DB_USER_NAME="root"
+export DB_PASSWORD="skdmlmysql96!"
+
