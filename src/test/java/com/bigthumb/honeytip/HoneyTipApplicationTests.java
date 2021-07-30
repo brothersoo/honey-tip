@@ -1,4 +1,4 @@
-package com.bigthumb.Honeytip;
+package com.bigthumb.honeytip;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

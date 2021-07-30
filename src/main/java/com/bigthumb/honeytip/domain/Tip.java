@@ -1,4 +1,4 @@
-package com.bigthumb.Honeytip.domain;
+package com.bigthumb.honeytip.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;

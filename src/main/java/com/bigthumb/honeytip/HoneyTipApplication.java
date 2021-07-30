@@ -1,4 +1,4 @@
-package com.bigthumb.Honeytip;
+package com.bigthumb.honeytip;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

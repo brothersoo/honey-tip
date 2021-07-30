@@ -1,4 +1,4 @@
-package com.bigthumb.Honeytip.domain;
+package com.bigthumb.honeytip.domain;
 
 public enum TipStatus {
   PST, RMV, HID, BAN

@@ -1,4 +1,4 @@
-package com.bigthumb.Honeytip.domain;
+package com.bigthumb.honeytip.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,4 +48,11 @@ public class User {
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Report> reports;
+
+  public void setUserData(String name, String nickName, String email, String password) {
+    this.name = name;
+    this.nickName = nickName;
+    this.email = email;
+    this.password = password;
+  }
 }
