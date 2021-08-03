@@ -1,21 +1,28 @@
 package com.bigthumb.honeytip.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.util.Assert;
 
 @Entity @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false)
@@ -27,4 +34,11 @@ public class Category {
 
   @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
   private List<Tip> tips;
+
+  @Builder
+  public Category(String name) {
+    Assert.notNull(name, "Category name should not be null");
+    this.name = name;
+    this.tips = new ArrayList<>();
+  }
 }
