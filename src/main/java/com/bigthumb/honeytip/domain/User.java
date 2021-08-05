@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 
 @Entity
@@ -86,5 +87,29 @@ public class User {
 
     this.tips = new ArrayList<>();
     this.reports = new ArrayList<>();
+  }
+
+  public void updateStatus(UserStatus status) {
+    this.status = status;
+  }
+
+  public void encryptPassword() {
+    BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder(10);
+    password = bcpe.encode(password);
+  }
+
+  public void validateInfo() {
+    if (email.length() > 50) {
+      throw new IllegalStateException("User email length should be under 50");
+    }
+    if (name.length() < 2 || name.length() > 30) {
+      throw new IllegalStateException("User name should be length between 2 to 30");
+    }
+    if (password.length() < 8 || password.length() > 23) {
+      throw new IllegalStateException("User password should be length between 8 to 23");
+    }
+    if (nickname.length() < 2 || nickname.length() > 16) {
+      throw new IllegalStateException("User nickname should be length between 2 to 16");
+    }
   }
 }
