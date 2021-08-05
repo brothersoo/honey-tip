@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.Assert;
 
 @Entity @Getter
@@ -28,9 +29,13 @@ public class Category {
   @Column(nullable = false)
   private String name;
 
-  @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
+  @Column(name = "created_at", nullable = false, insertable = false, updatable = false, columnDefinition="timestamp DEFAULT CURRENT_TIMESTAMP")
   @CreationTimestamp
   private LocalDateTime createdAt;
+
+  @Column(name = "updated_at", nullable = false, insertable = false, updatable = false, columnDefinition="timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+  @UpdateTimestamp
+  private LocalDateTime updatedAt;
 
   @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
   private List<Tip> tips;

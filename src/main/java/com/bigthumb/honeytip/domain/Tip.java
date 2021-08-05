@@ -33,11 +33,11 @@ public class Tip {
   @Column(nullable = false)
   private String title;
 
-  @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
+  @Column(name = "created_at", nullable = false, insertable = false, updatable = false, columnDefinition="timestamp DEFAULT CURRENT_TIMESTAMP")
   @CreationTimestamp
   private LocalDateTime createdAt;
 
-  @Column(name = "updated_at", nullable = false)
+  @Column(name = "updated_at", nullable = false, insertable = false, updatable = false, columnDefinition="timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
@@ -76,7 +76,7 @@ public class Tip {
     this.reports = new ArrayList<>();
   }
 
-  public void update(String title, String content, Category category) {
+  public void updateInfo(String title, String content, Category category) {
     if (title != null) {
       this.title = title;
     }
@@ -87,5 +87,9 @@ public class Tip {
       this.category = category;
       this.category.getTips().add(this);
     }
+  }
+
+  public void updateStatus(TipStatus status) {
+    this.status = status;
   }
 }
