@@ -2,7 +2,9 @@ package com.bigthumb.honeytip.repository;
 
 import static com.bigthumb.honeytip.domain.QUser.user;
 
+import com.bigthumb.honeytip.domain.QUser;
 import com.bigthumb.honeytip.domain.User;
+import com.bigthumb.honeytip.domain.UserStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -19,8 +21,13 @@ public class UserRepository {
     em.persist(user);
   }
 
-  public User findOne(Long id) {
+  public User findById(Long id) {
     return em.find(User.class, id);
+  }
+
+  public User findByEmail(String email) {
+    JPAQueryFactory query = new JPAQueryFactory(em);
+    return query.selectFrom(user).where(user.email.eq(email)).fetchOne();
   }
 
   public List<User> findAll() {
@@ -29,6 +36,27 @@ public class UserRepository {
 
   public List<User> findByNickName(String nickName) {
     JPAQueryFactory query = new JPAQueryFactory(em);
-    return query.selectFrom(user).where(user.nickname.likeIgnoreCase(nickName)).fetch();
+    return query.selectFrom(user).where(user.nickname.likeIgnoreCase("%" + nickName + "%")).fetch();
+  }
+
+  /**
+   * Member quit by himself
+   */
+  public void remove(User user) {
+    user.updateStatus(UserStatus.QUT);
+  }
+
+  /**
+   * Admin bans a member
+   */
+  public void ban(User user) {
+    user.updateStatus(UserStatus.BAN);
+  }
+
+  /**
+   * Admin deletes a member
+   */
+  public void delete(User user) {
+    em.remove(user);
   }
 }
