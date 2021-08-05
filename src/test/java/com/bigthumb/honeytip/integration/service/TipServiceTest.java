@@ -101,12 +101,7 @@ class TipServiceTest {
     Category 카테고리 = fakeCategory();
     Tip 팁 = Tip.builder().title("코딩 꿀팁 대방출").content("테스팅을 생활화합시다^^*").user(사용자).category(카테고리).build();
     팁서비스.createTip(팁);
-    User 다른사용자 = User.builder()
-        .name(koFaker.name().fullName()).email(faker.internet().emailAddress())
-        .nickname(faker.leagueOfLegends().champion())
-        .password(faker.crypto().sha256())
-        .build();
-    사용자저장소.save(다른사용자);
+    User 다른사용자 = fakeMember();
 
     // when then
     assertThrows(IllegalArgumentException.class,
@@ -125,6 +120,36 @@ class TipServiceTest {
     // when then
     assertThrows(IllegalArgumentException.class,
         () -> 팁서비스.updateTip(팁.getId(), 사용자.getId(), "어쩌구", "저쩌구", "이러쿵"));
+  }
+
+  @Test
+  @DisplayName("팁 숨기기")
+  void hideTip() {
+    // given
+    User 사용자 = fakeMember();
+    Category 카테고리 = fakeCategory();
+    Tip 팁 = Tip.builder().title("코딩 꿀팁 대방출").content("테스팅을 생활화합시다^^*").user(사용자).category(카테고리).build();
+    팁서비스.createTip(팁);
+
+    // when
+    팁서비스.hideById(팁.getId(), 사용자.getId());
+
+    //then
+    assertThat(팁서비스.findById(팁.getId()).getStatus()).isEqualTo(TipStatus.HID);
+  }
+
+  @Test
+  @DisplayName("팁 작성자가 아닌 다른 사용자가 팁 제거 실패")
+  void onlyWriterCanHideTip() {
+    // given
+    User 사용자 = fakeMember();
+    Category 카테고리 = fakeCategory();
+    Tip 팁 = Tip.builder().title("코딩 꿀팁 대방출").content("테스팅을 생활화합시다^^*").user(사용자).category(카테고리).build();
+    팁서비스.createTip(팁);
+    User 다른사용자 = fakeMember();
+
+    // when then
+    assertThrows(IllegalArgumentException.class, () -> 팁서비스.hideById(팁.getId(), 다른사용자.getId()));
   }
 
   @Test
@@ -151,12 +176,7 @@ class TipServiceTest {
     Category 카테고리 = fakeCategory();
     Tip 팁 = Tip.builder().title("코딩 꿀팁 대방출").content("테스팅을 생활화합시다^^*").user(사용자).category(카테고리).build();
     팁서비스.createTip(팁);
-    User 다른사용자 = User.builder()
-        .name(koFaker.name().fullName()).email(faker.internet().emailAddress())
-        .nickname(faker.leagueOfLegends().champion())
-        .password(faker.crypto().sha256())
-        .build();
-    사용자저장소.save(다른사용자);
+    User 다른사용자 = fakeMember();
 
     // when then
     assertThrows(IllegalArgumentException.class, () -> 팁서비스.removeById(팁.getId(), 다른사용자.getId()));

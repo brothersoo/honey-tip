@@ -60,6 +60,14 @@ public class TipService {
     return updatableTip;
   }
 
+  public void hideById(Long tipId, Long requestUserId) {
+    Tip hidableTip = tipRepository.findOne(tipId);
+    if (!hidableTip.getUser().getId().equals(requestUserId)) {
+      throw new IllegalArgumentException("No permission for this request user");
+    }
+    tipRepository.hide(hidableTip);
+  }
+
   /**
    * self removal
    */

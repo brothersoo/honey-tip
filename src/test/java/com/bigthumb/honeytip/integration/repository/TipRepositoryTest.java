@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @TestPropertySource("classpath:application-test.properties")
-public class TipRepositoryTest {
+class TipRepositoryTest {
 
   @Autowired TipRepository 팁저장소;
   @Autowired CategoryRepository 카테고리저장소;
