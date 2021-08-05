@@ -31,6 +31,8 @@ dependencies {
 
 	implementation 'com.github.javafaker:javafaker:1.0.2'
 
+	implementation 'com.h2database:h2'
+
 	// querydsl
 	implementation group: 'com.querydsl', name: 'querydsl-jpa', version: querydslVersion
 	implementation group: 'com.querydsl', name: 'querydsl-apt', version: querydslVersion
