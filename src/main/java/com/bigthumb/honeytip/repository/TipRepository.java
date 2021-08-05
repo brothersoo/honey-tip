@@ -20,7 +20,7 @@ public class TipRepository {
     em.persist(tip);
   }
 
-  public Tip findById(Long id) {
+  public Tip findOne(Long id) {
     return em.find(Tip.class, id);
   }
 
@@ -43,7 +43,22 @@ public class TipRepository {
             ).fetch();
   }
 
+  public void hide(Tip tip) {
+    tip.updateStatus(TipStatus.HID);
+  }
+
+  /**
+   * User cannot retrieve removed tip, but is not erased in database.
+   * Only admin can erase or un-remove removed tip.
+   */
   public void remove(Tip tip) {
+    tip.updateStatus(TipStatus.RMV);
+  }
+
+  /**
+   * Remove tip from service and database.
+   */
+  public void delete(Tip tip) {
     em.remove(tip);
   }
 }
