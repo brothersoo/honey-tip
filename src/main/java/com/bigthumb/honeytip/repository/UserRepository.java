@@ -5,6 +5,7 @@ import static com.bigthumb.honeytip.domain.QUser.user;
 import com.bigthumb.honeytip.domain.QUser;
 import com.bigthumb.honeytip.domain.User;
 import com.bigthumb.honeytip.domain.UserStatus;
+import com.bigthumb.honeytip.domain.UserType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -34,9 +35,25 @@ public class UserRepository {
     return em.createQuery("SELECT u from User u", User.class).getResultList();
   }
 
-  public List<User> findByNickName(String nickName) {
+  public List<User> findAllMember() {
     JPAQueryFactory query = new JPAQueryFactory(em);
-    return query.selectFrom(user).where(user.nickname.likeIgnoreCase("%" + nickName + "%")).fetch();
+    return query.selectFrom(user).where(user.type.eq(UserType.MEM)).fetch();
+  }
+
+  public List<User> findByNickname(String keyword) {
+    JPAQueryFactory query = new JPAQueryFactory(em);
+    return query.selectFrom(user).where(user.nickname.likeIgnoreCase("%" + keyword + "%")).fetch();
+  }
+
+  public List<User> findMemberByNickname(String keyword) {
+    JPAQueryFactory query = new JPAQueryFactory(em);
+    return query
+        .selectFrom(user)
+        .where(
+            user.nickname.likeIgnoreCase("%" + keyword + "%")
+                .and(user.type.eq(UserType.MEM))
+        )
+        .fetch();
   }
 
   /**

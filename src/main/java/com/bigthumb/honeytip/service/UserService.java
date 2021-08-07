@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
   private final UserRepository userRepository;
 
-  @Transactional
   public Long join(User user) {
     checkDuplicateEmail(user.getEmail());
     user.validateInfo();
@@ -23,6 +23,7 @@ public class UserService {
     return user.getId();
   }
 
+  @Transactional(readOnly = true)
   public List<User> findAllUser(Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
     if (!requestUser.getType().equals(UserType.ADM)) {
@@ -31,12 +32,32 @@ public class UserService {
     return userRepository.findAll();
   }
 
+  @Transactional(readOnly = true)
+  public List<User> findAllMember(Long requestUserId) {
+    User requestUser = userRepository.findById(requestUserId);
+    if (!requestUser.getType().equals(UserType.ADM)) {
+      throw new IllegalArgumentException("This user has no permission");
+    }
+    return userRepository.findAllMember();
+  }
+
+  @Transactional(readOnly = true)
   public User searchUserById(Long userId) {
     return userRepository.findById(userId);
   }
 
-  public List<User> searchUserByNickname(String nickname) {
-    return userRepository.findByNickName(nickname);
+  @Transactional(readOnly = true)
+  public List<User> searchByNickname(String nickname, Long requestUserId) {
+    User requestUser = userRepository.findById(requestUserId);
+    if (!requestUser.getType().equals(UserType.ADM)) {
+      throw new IllegalArgumentException("This user has no permission");
+    }
+    return userRepository.findByNickname(nickname);
+  }
+
+  @Transactional(readOnly = true)
+  public List<User> searchMemberByNickname(String nickname) {
+    return userRepository.findMemberByNickname(nickname);
   }
 
   public void dropOut(Long requestUserId) {
