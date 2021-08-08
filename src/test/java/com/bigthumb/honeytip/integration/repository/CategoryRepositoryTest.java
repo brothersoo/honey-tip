@@ -35,7 +35,7 @@ class CategoryRepositoryTest {
   @DisplayName("카테고리 생성")
   void saveCategory() {
     // given
-    Category 새카테고리 = Category.builder().name(koFaker.name().title()).build();
+    Category 새카테고리 = Category.builder().name(koFaker.lorem().characters(2, 30)).build();
     카테고리저장소.save(새카테고리);
 
     // when
@@ -91,7 +91,7 @@ class CategoryRepositoryTest {
 
   void createNCategories(int n) {
     for (int i = 0; i < n; i++) {
-      Category 새카테고리 = Category.builder().name(koFaker.name().title()).build();
+      Category 새카테고리 = Category.builder().name(koFaker.lorem().characters(2, 30)).build();
       카테고리저장소.save(새카테고리);
     }
   }

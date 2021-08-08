@@ -47,7 +47,7 @@ class CategoryServiceTest {
   void addCategory() {
     // given
     User 관리자 = fakeAdmin();
-    Category 새카테고리 = Category.builder().name(koFaker.name().title()).build();
+    Category 새카테고리 = Category.builder().name(koFaker.lorem().characters(2, 30)).build();
     카테고리서비스.add(새카테고리, 관리자.getId());
 
     // when
@@ -62,7 +62,7 @@ class CategoryServiceTest {
   void onlyAdminCanAddCategory() {
     // given
     User 일반사용자 = fakeMember();
-    Category 새카테고리 = Category.builder().name(koFaker.name().title()).build();
+    Category 새카테고리 = Category.builder().name(koFaker.lorem().characters(2, 30)).build();
 
     // when then throws
     assertThrows(IllegalArgumentException.class,
@@ -115,7 +115,7 @@ class CategoryServiceTest {
   void deleteCategory() {
     // given
     User 관리자 = fakeAdmin();
-    Category 새카테고리 = Category.builder().name(koFaker.name().title()).build();
+    Category 새카테고리 = Category.builder().name(koFaker.lorem().characters(2, 30)).build();
     카테고리서비스.add(새카테고리, 관리자.getId());
 
     // when
@@ -130,7 +130,7 @@ class CategoryServiceTest {
   void onlyAdminCanDeleteCategory() {
     // given
     User 일반사용자 = fakeMember();
-    Category 새카테고리 = Category.builder().name(koFaker.name().title()).build();
+    Category 새카테고리 = Category.builder().name(koFaker.lorem().characters(2, 30)).build();
 
     // when then throws
     Assertions.assertThrows(IllegalArgumentException.class,
@@ -139,7 +139,7 @@ class CategoryServiceTest {
 
   void createNCategories(int n) {
     for (int i = 0; i < n; i++) {
-      Category 새카테고리 = Category.builder().name(koFaker.name().title()).build();
+      Category 새카테고리 = Category.builder().name(koFaker.lorem().characters(2, 30)).build();
       카테고리저장소.save(새카테고리);
     }
   }
