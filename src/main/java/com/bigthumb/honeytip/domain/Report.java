@@ -3,6 +3,8 @@ package com.bigthumb.honeytip.domain;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,14 +33,22 @@ public class Report {
   @UpdateTimestamp
   private LocalDateTime updateAt;
 
+  @Enumerated(EnumType.STRING)
+  private ReportStatus status;
+
   @ManyToOne(fetch = FetchType.LAZY)
   private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   private Tip tip;
 
+  public void changeStatus(ReportStatus status) {
+    this.status = status;
+  }
+
   @Builder
   public Report(User user, Tip tip) {
+    this.status = ReportStatus.PND;
     this.user = user;
     this.tip = tip;
   }
