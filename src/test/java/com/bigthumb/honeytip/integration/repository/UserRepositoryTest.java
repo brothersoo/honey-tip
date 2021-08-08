@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @TestPropertySource("classpath:application-test.properties")
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
   @Autowired UserRepository 사용자저장소;
 
@@ -92,7 +92,7 @@ public class UserRepositoryTest {
     사용자저장소.save(박검색);
 
     // when
-    List<User> 검색이들 = 사용자저장소.findByNickName("검색");
+    List<User> 검색이들 = 사용자저장소.findByNickname("검색");
 
     //then
     assertThat(검색이들.size()).isEqualTo(3);
