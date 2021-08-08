@@ -99,11 +99,11 @@ public class User {
   }
 
   public void validateInfo() {
-    if (email.length() > 50) {
-      throw new IllegalStateException("User email length should be under 50");
-    }
     if (name.length() < 2 || name.length() > 30) {
       throw new IllegalStateException("User name should be length between 2 to 30");
+    }
+    if (email.length() > 50) {
+      throw new IllegalStateException("User email length should be under 50");
     }
     if (password.length() < 8 || password.length() > 23) {
       throw new IllegalStateException("User password should be length between 8 to 23");
