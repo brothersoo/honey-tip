@@ -46,4 +46,10 @@ public class Category {
     this.name = name;
     this.tips = new ArrayList<>();
   }
+
+  public void validateInfo() {
+    if (name.length() < 2 || name.length() > 30) {
+      throw new IllegalStateException("Category name length should be between 2 to 30.");
+    }
+  }
 }
