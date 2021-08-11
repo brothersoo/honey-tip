@@ -16,11 +16,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
 @ExtendWith(MockitoExtension.class)
+@TestPropertySource("classpath:application-test.properties")
 public class UserRepositoryTest {
 
   @Mock private UserRepository 유저저장소;
@@ -90,10 +92,10 @@ public class UserRepositoryTest {
   @DisplayName("Id로 유저 검색")
   void findUserById() {
     // given
-    given(유저저장소.findOne(1L)).willReturn(일반회원);
+    given(유저저장소.findById(1L)).willReturn(일반회원);
 
     // when
-    User 검색회원 = 유저저장소.findOne(1L);
+    User 검색회원 = 유저저장소.findById(1L);
 
     //then
     assertThat(검색회원).isEqualTo(일반회원);
