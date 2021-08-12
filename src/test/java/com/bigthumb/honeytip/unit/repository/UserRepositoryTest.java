@@ -19,10 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
 @Transactional
 @ExtendWith(MockitoExtension.class)
-@TestPropertySource("classpath:application-test.properties")
 public class UserRepositoryTest {
 
   @Mock private UserRepository 유저저장소;
@@ -33,11 +31,9 @@ public class UserRepositoryTest {
 
   @BeforeAll
   static void setUser() {
-    일반회원 = User.builder().name("홍길동").nickname("mrHong").email("Mr.Hong@gmail.com")
-        .password("SHA-256").build();
-    관리자 = User.builder().name("김첨지").nickname("gongYangMi300").email("GYM300@gmail.com")
-        .password("RSA").type(
-            UserType.ADM).build();
+    일반회원 = User.builder().username("홍길동").nickname("mrHong").password("SHA-256").build();
+    관리자 = User.builder().username("김첨지").nickname("gongYangMi300").password("RSA")
+        .type(UserType.ADMIN).build();
     유저리스트 = new ArrayList<>();
     유저리스트.add(일반회원);
     유저리스트.add(관리자);
@@ -71,20 +67,16 @@ public class UserRepositoryTest {
   @Test
   @DisplayName("회원 필수값 없어서 생성 실패")
   void mandatoryValueMissingUser() {
-    assertThrows(IllegalArgumentException.class, () -> User.builder().nickname("noName").email("anonymous@gmail.com")
-        .password("MysEcrEt").build(), "User name should not be null");
+    assertThrows(IllegalArgumentException.class,
+        () -> User.builder().nickname("noName").password("MysEcrEt").build(),
+        "User name should not be null");
 
     assertThrows(IllegalArgumentException.class,
-        () -> User.builder().name("noNickName").email("onlyName@gmail.com").password("QWERTY").build(),
+        () -> User.builder().username("noNickName").password("QWERTY").build(),
         "User nickname should not be null");
 
     assertThrows(IllegalArgumentException.class,
-        () -> User.builder().name("noEmail").nickname("lonely").password("password123").build(),
-        "User email should not be null");
-
-    assertThrows(IllegalArgumentException.class,
-        () -> User.builder().name("noPassword").nickname("pieceOfCake")
-            .email("Antoinette@gmail.com").build(),
+        () -> User.builder().username("noPassword").nickname("pieceOfCake").build(),
         "User password should not be null");
   }
 

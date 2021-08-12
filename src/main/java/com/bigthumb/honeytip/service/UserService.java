@@ -18,7 +18,7 @@ public class UserService {
   private final UserRepository userRepository;
 
   public Long join(User user) {
-    checkDuplicateEmail(user.getEmail());
+    checkDuplicateUsername(user.getUsername());
     user.validateInfo();
     user.encryptPassword();
     userRepository.save(user);
@@ -85,8 +85,8 @@ public class UserService {
     userRepository.remove(deletableUser);
   }
 
-  private void checkDuplicateEmail(String email) {
-    if (userRepository.findByEmail(email) != null) {
+  private void checkDuplicateUsername(String username) {
+    if (userRepository.findByUsername(username) != null) {
       throw new IllegalStateException("Already existing email");
     }
   }

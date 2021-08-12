@@ -92,7 +92,7 @@ public class ReportReporitoryTest {
     신고저장소.reject(신고);
 
     //then
-    assertThat(신고저장소.findById(신고.getId()).getStatus()).isEqualTo(ReportStatus.REJ);
+    assertThat(신고저장소.findById(신고.getId()).getStatus()).isEqualTo(ReportStatus.REJECTED);
   }
 
   @Test
@@ -110,15 +110,15 @@ public class ReportReporitoryTest {
     신고저장소.approve(신고);
 
     //then
-    assertThat(신고저장소.findById(신고.getId()).getStatus()).isEqualTo(ReportStatus.APR);
+    assertThat(신고저장소.findById(신고.getId()).getStatus()).isEqualTo(ReportStatus.APROVED);
   }
 
   User fakeAdmin() {
     User 관리자 = User.builder()
-        .name(koFaker.name().fullName()).email(faker.internet().emailAddress())
+        .username(koFaker.name().fullName())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.crypto().sha256())
-        .type(UserType.ADM)
+        .type(UserType.ADMIN)
         .build();
     사용자저장소.save(관리자);
     return 관리자;
@@ -126,7 +126,7 @@ public class ReportReporitoryTest {
 
   User fakeMember() {
     User 사용자 = User.builder()
-        .name(koFaker.name().fullName()).email(faker.internet().emailAddress())
+        .username(faker.name().fullName())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.crypto().sha256())
         .build();

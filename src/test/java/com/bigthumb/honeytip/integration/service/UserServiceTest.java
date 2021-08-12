@@ -38,8 +38,7 @@ public class UserServiceTest {
   void signIn() {
     // given
     User 신규회원 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(faker.internet().emailAddress())
+        .username(koFaker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
         .build();
@@ -52,19 +51,18 @@ public class UserServiceTest {
   }
 
   @Test
-  @DisplayName("중복 이메일 회원가입 실패")
-  void failSignInDueToDuplicateEmail() {
+  @DisplayName("중복 유저명 회원가입 실패")
+  void failSignInDueToDuplicateUsername() {
     // given
+    String 유저명 = "Honey Tip";
     User 기존회원 = User.builder()
-        .name(koFaker.name().fullName())
-        .email("existing@example.com")
+        .username(유저명)
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
         .build();
     사용자서비스.join(기존회원);
     User 신규회원 = User.builder()
-        .name(koFaker.name().fullName())
-        .email("existing@example.com")
+        .username(유저명)
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
         .build();
@@ -77,10 +75,9 @@ public class UserServiceTest {
   @DisplayName("이름 길이 미달")
   void shortNameLength() {
     // given
-    String 너무짧은이름 = koFaker.lorem().characters(1);
+    String 너무짧은이름 = koFaker.lorem().characters(2);
     User 신규회원 = User.builder()
-        .name(너무짧은이름)
-        .email(faker.internet().emailAddress())
+        .username(너무짧은이름)
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
         .build();
@@ -95,24 +92,7 @@ public class UserServiceTest {
     // given
     String 너무긴이름 = koFaker.lorem().characters(31);
     User 신규회원 = User.builder()
-        .name(너무긴이름)
-        .email(faker.internet().emailAddress())
-        .nickname(faker.leagueOfLegends().champion())
-        .password(faker.lorem().characters(8, 20))
-        .build();
-
-    // when then throws
-    assertThrows(IllegalStateException.class, () -> 사용자서비스.join(신규회원));
-  }
-
-  @Test
-  @DisplayName("이메일 길이 초과")
-  void longEmailLength() {
-    // given
-    String 너무긴이메일 = faker.lorem().characters(51);
-    User 신규회원 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(너무긴이메일)
+        .username(너무긴이름)
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
         .build();
@@ -127,8 +107,7 @@ public class UserServiceTest {
     // given
     String 너무짧은비밀번호 = faker.lorem().characters(7);
     User 신규회원 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(faker.internet().emailAddress())
+        .username(koFaker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(너무짧은비밀번호)
         .build();
@@ -143,8 +122,7 @@ public class UserServiceTest {
     String 너무긴비밀번호 = faker.lorem().characters(24);
     // given
     User 신규회원 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(faker.internet().emailAddress())
+        .username(koFaker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(너무긴비밀번호)
         .build();
@@ -159,8 +137,7 @@ public class UserServiceTest {
     // given
     String 너무짧은닉네임 = faker.lorem().characters(1);
     User 신규회원 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(faker.internet().emailAddress())
+        .username(koFaker.name().username())
         .nickname(너무짧은닉네임)
         .password(faker.lorem().characters(8, 20))
         .build();
@@ -175,9 +152,29 @@ public class UserServiceTest {
     // given
     String 너무긴닉네임 = faker.lorem().characters(17);
     User 신규회원 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(faker.internet().emailAddress())
+        .username(koFaker.name().username())
         .nickname(너무긴닉네임)
+        .password(faker.lorem().characters(8, 20))
+        .build();
+
+    // when then throws
+    assertThrows(IllegalStateException.class, () -> 사용자서비스.join(신규회원));
+  }
+
+  @Test
+  @DisplayName("닉네임 중복 회원가입 실패")
+  void test() {
+    // given
+    String 닉네임 = "Honey Tip";
+    User 기존회원 = User.builder()
+        .username(faker.name().username())
+        .nickname(닉네임)
+        .password(faker.lorem().characters(8, 20))
+        .build();
+    사용자서비스.join(기존회원);
+    User 신규회원 = User.builder()
+        .username(faker.name().username())
+        .nickname(닉네임)
         .password(faker.lorem().characters(8, 20))
         .build();
 
@@ -240,11 +237,10 @@ public class UserServiceTest {
 
   private User fakeAdmin() {
     User 관리자 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(faker.internet().emailAddress())
+        .username(koFaker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
-        .type(UserType.ADM)
+        .type(UserType.ADMIN)
         .build();
     사용자서비스.join(관리자);
     return 관리자;
@@ -252,8 +248,7 @@ public class UserServiceTest {
 
   private User fakeMember() {
     User 사용자 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(faker.internet().emailAddress())
+        .username(koFaker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
         .build();

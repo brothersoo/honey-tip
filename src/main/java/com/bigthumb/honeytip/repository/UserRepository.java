@@ -25,9 +25,9 @@ public class UserRepository {
     return em.find(User.class, id);
   }
 
-  public User findByEmail(String email) {
+  public User findByUsername(String username) {
     JPAQueryFactory query = new JPAQueryFactory(em);
-    return query.selectFrom(user).where(user.email.eq(email)).fetchOne();
+    return query.selectFrom(user).where(user.username.eq(username)).fetchOne();
   }
 
   public List<User> findAll() {

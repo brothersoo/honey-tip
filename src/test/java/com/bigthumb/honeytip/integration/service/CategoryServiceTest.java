@@ -146,11 +146,10 @@ class CategoryServiceTest {
 
   private User fakeAdmin() {
     User 관리자 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(faker.internet().emailAddress())
+        .username(faker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
-        .type(UserType.ADM)
+        .type(UserType.ADMIN)
         .build();
     사용자저장소.save(관리자);
     return 관리자;
@@ -158,8 +157,7 @@ class CategoryServiceTest {
 
   private User fakeMember() {
     User 사용자 = User.builder()
-        .name(koFaker.name().fullName())
-        .email(faker.internet().emailAddress())
+        .username(faker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
         .build();

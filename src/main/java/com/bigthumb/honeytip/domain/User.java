@@ -32,7 +32,7 @@ public class User {
   private Long id;
 
   @Column(nullable = false)
-  private String name;
+  private String username;
 
   @Column(name = "created_at", nullable = false, insertable = false, updatable = false, columnDefinition="timestamp DEFAULT CURRENT_TIMESTAMP")
   @CreationTimestamp
@@ -44,9 +44,6 @@ public class User {
 
   @Column(nullable = false)
   private String nickname;
-
-  @Column(nullable = false)
-  private String email;
 
   @Column(nullable = false)
   private String password;
@@ -64,23 +61,21 @@ public class User {
   private List<Report> reports;
 
   @Builder
-  public User(String name, String nickname, String email, String password, UserType type,
+  public User(String username, String nickname, String password, UserType type,
       UserStatus status) {
-    Assert.notNull(name, "User name should not be null");
+    Assert.notNull(username, "User name should not be null");
     Assert.notNull(nickname, "User nickname should not be null");
-    Assert.notNull(email, "User email should not be null");
     Assert.notNull(password, "User password should not be null");
 
     if (type == null) {
-      type = UserType.MEM;
+      type = UserType.MEMBER;
     }
     if (status == null) {
-      status = UserStatus.NON;
+      status = UserStatus.ACTIVATE;
     }
 
-    this.name = name;
+    this.username = username;
     this.nickname = nickname;
-    this.email = email;
     this.password = password;
     this.type = type;
     this.status = status;
@@ -99,11 +94,8 @@ public class User {
   }
 
   public void validateInfo() {
-    if (name.length() < 2 || name.length() > 30) {
-      throw new IllegalStateException("User name should be length between 2 to 30");
-    }
-    if (email.length() > 50) {
-      throw new IllegalStateException("User email length should be under 50");
+    if (username.length() < 3 || username.length() > 30) {
+      throw new IllegalStateException("User name should be length between 3 to 30");
     }
     if (password.length() < 8 || password.length() > 23) {
       throw new IllegalStateException("User password should be length between 8 to 23");

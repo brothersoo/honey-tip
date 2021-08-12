@@ -37,10 +37,9 @@ class UserRepositoryTest {
   void saveUser() {
     // given
     User 사용자 = User.builder()
-        .name(koFaker.name().name())
+        .username(koFaker.name().username())
         .password(faker.crypto().sha256())
         .nickname(koFaker.funnyName().name())
-        .email(faker.internet().emailAddress())
         .build();
     사용자저장소.save(사용자);
 
@@ -70,22 +69,19 @@ class UserRepositoryTest {
     // given
     createNUsers(10);
     User 김검색 = User.builder()
-        .name(koFaker.name().name())
+        .username(koFaker.name().username())
         .password(faker.crypto().sha256())
         .nickname("김검색")
-        .email(faker.internet().emailAddress())
         .build();
     User 이검색 = User.builder()
-        .name(koFaker.name().name())
+        .username(koFaker.name().username())
         .password(faker.crypto().sha256())
         .nickname("이검색")
-        .email(faker.internet().emailAddress())
         .build();
     User 박검색 = User.builder()
-        .name(koFaker.name().name())
+        .username(koFaker.name().username())
         .password(faker.crypto().sha256())
         .nickname("박검색")
-        .email(faker.internet().emailAddress())
         .build();
     사용자저장소.save(김검색);
     사용자저장소.save(이검색);
@@ -104,10 +100,9 @@ class UserRepositoryTest {
   void removeUser() {
     // given
     User 사용자 = User.builder()
-        .name(koFaker.name().name())
+        .username(koFaker.name().username())
         .password(faker.crypto().sha256())
         .nickname(koFaker.funnyName().name())
-        .email(faker.internet().emailAddress())
         .build();
     사용자저장소.save(사용자);
 
@@ -115,7 +110,7 @@ class UserRepositoryTest {
     사용자저장소.remove(사용자);
 
     //then
-    assertThat(사용자저장소.findById(사용자.getId()).getStatus()).isEqualTo(UserStatus.QUT);
+    assertThat(사용자저장소.findById(사용자.getId()).getStatus()).isEqualTo(UserStatus.QUIT);
   }
 
   @Test
@@ -123,10 +118,9 @@ class UserRepositoryTest {
   void banUser() {
     // given
     User 사용자 = User.builder()
-        .name(koFaker.name().name())
+        .username(koFaker.name().username())
         .password(faker.crypto().sha256())
         .nickname(koFaker.funnyName().name())
-        .email(faker.internet().emailAddress())
         .build();
     사용자저장소.save(사용자);
 
@@ -134,7 +128,7 @@ class UserRepositoryTest {
     사용자저장소.ban(사용자);
 
     //then
-    assertThat(사용자저장소.findById(사용자.getId()).getStatus()).isEqualTo(UserStatus.BAN);
+    assertThat(사용자저장소.findById(사용자.getId()).getStatus()).isEqualTo(UserStatus.BANNED);
   }
 
   @Test
@@ -142,10 +136,9 @@ class UserRepositoryTest {
   void deleteUser() {
     // given
     User 사용자 = User.builder()
-        .name(koFaker.name().name())
+        .username(koFaker.name().username())
         .password(faker.crypto().sha256())
         .nickname(koFaker.funnyName().name())
-        .email(faker.internet().emailAddress())
         .build();
     사용자저장소.save(사용자);
 
@@ -159,10 +152,9 @@ class UserRepositoryTest {
   void createNUsers(int n) {
     for (int i = 0; i < n; i++) {
       User 사용자 = User.builder()
-          .name(koFaker.name().name())
+          .username(koFaker.name().username())
           .password(faker.crypto().sha256())
           .nickname(koFaker.funnyName().name())
-          .email(faker.internet().emailAddress())
           .build();
       사용자저장소.save(사용자);
     }

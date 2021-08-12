@@ -95,8 +95,7 @@ class TipRepositoryTest {
     Category 카테고리 = fakeCategory();
     createNTips(10, 사용자, 카테고리);
     User 김검색 = User.builder()
-        .name(faker.name().name())
-        .email(faker.internet().emailAddress())
+        .username(faker.name().username())
         .nickname("김검색")
         .password(faker.crypto().sha256())
         .build();
@@ -137,9 +136,9 @@ class TipRepositoryTest {
     // given
     User 사용자 = fakeMember();
     Category 카테고리 = fakeCategory();
-    Tip 신고팁 = Tip.builder().title("바보녀석").content("신고하지 말아주세요ㅠㅠ").user(사용자).category(카테고리).status(TipStatus.BAN).build();
-    Tip 숨긴팁 = Tip.builder().title("부끄러워").content("숨겨버려야겠다...").user(사용자).category(카테고리).status(TipStatus.HID).build();
-    Tip 삭제팁 = Tip.builder().title("이유없어").content("왜 썼지? 지워야겠다").user(사용자).category(카테고리).status(TipStatus.RMV).build();
+    Tip 신고팁 = Tip.builder().title("바보녀석").content("신고하지 말아주세요ㅠㅠ").user(사용자).category(카테고리).status(TipStatus.REPORTED).build();
+    Tip 숨긴팁 = Tip.builder().title("부끄러워").content("숨겨버려야겠다...").user(사용자).category(카테고리).status(TipStatus.HIDDEN).build();
+    Tip 삭제팁 = Tip.builder().title("이유없어").content("왜 썼지? 지워야겠다").user(사용자).category(카테고리).status(TipStatus.REMOVED).build();
     팁저장소.save(신고팁);
     팁저장소.save(숨긴팁);
     팁저장소.save(삭제팁);
@@ -164,7 +163,7 @@ class TipRepositoryTest {
     팁저장소.remove(팁);
 
     //then
-    assertThat(팁저장소.findOne(팁.getId()).getStatus()).isEqualTo(TipStatus.RMV);
+    assertThat(팁저장소.findOne(팁.getId()).getStatus()).isEqualTo(TipStatus.REMOVED);
   }
 
   @Test
@@ -195,7 +194,7 @@ class TipRepositoryTest {
     팁저장소.hide(팁);
 
     //then
-    assertThat(팁저장소.findOne(팁.getId()).getStatus()).isEqualTo(TipStatus.HID);
+    assertThat(팁저장소.findOne(팁.getId()).getStatus()).isEqualTo(TipStatus.HIDDEN);
   }
 
   void createNTips(int n, User 작성자, Category 팁카테고리) {
@@ -213,10 +212,10 @@ class TipRepositoryTest {
 
   User fakeAdmin() {
     User 관리자 = User.builder()
-        .name(koFaker.name().fullName()).email(faker.internet().emailAddress())
+        .username(faker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.crypto().sha256())
-        .type(UserType.ADM)
+        .type(UserType.ADMIN)
         .build();
     사용자저장소.save(관리자);
     return 관리자;
@@ -224,7 +223,7 @@ class TipRepositoryTest {
 
   User fakeMember() {
     User 사용자 = User.builder()
-        .name(koFaker.name().fullName()).email(faker.internet().emailAddress())
+        .username(faker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.crypto().sha256())
         .build();

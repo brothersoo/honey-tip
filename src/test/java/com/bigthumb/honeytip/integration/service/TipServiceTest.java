@@ -135,7 +135,7 @@ class TipServiceTest {
     팁서비스.hideById(팁.getId(), 사용자.getId());
 
     //then
-    assertThat(팁서비스.findById(팁.getId()).getStatus()).isEqualTo(TipStatus.HID);
+    assertThat(팁서비스.findById(팁.getId()).getStatus()).isEqualTo(TipStatus.HIDDEN);
   }
 
   @Test
@@ -165,7 +165,7 @@ class TipServiceTest {
     팁서비스.removeById(팁.getId(), 사용자.getId());
 
     //then
-    assertThat(팁서비스.findById(팁.getId()).getStatus()).isEqualTo(TipStatus.RMV);
+    assertThat(팁서비스.findById(팁.getId()).getStatus()).isEqualTo(TipStatus.REMOVED);
   }
 
   @Test
@@ -226,10 +226,10 @@ class TipServiceTest {
 
   User fakeAdmin() {
     User 관리자 = User.builder()
-        .name(koFaker.name().fullName()).email(faker.internet().emailAddress())
+        .username(faker.name().fullName())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.crypto().sha256())
-        .type(UserType.ADM)
+        .type(UserType.ADMIN)
         .build();
     사용자저장소.save(관리자);
     return 관리자;
@@ -237,7 +237,7 @@ class TipServiceTest {
 
   User fakeMember() {
     User 사용자 = User.builder()
-        .name(koFaker.name().fullName()).email(faker.internet().emailAddress())
+        .username(faker.name().username())
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.crypto().sha256())
         .build();
