@@ -48,7 +48,7 @@ public class Report {
 
   @Builder
   public Report(User user, Tip tip) {
-    this.status = ReportStatus.PND;
+    this.status = ReportStatus.PENDING;
     this.user = user;
     this.tip = tip;
   }

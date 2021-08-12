@@ -51,7 +51,7 @@ public class Tip {
   private Category category;
 
   @Enumerated(EnumType.STRING)
-  private TipStatus status = TipStatus.PST;
+  private TipStatus status = TipStatus.POSTED;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "tip")
   private List<Report> reports;
@@ -64,7 +64,7 @@ public class Tip {
     Assert.notNull(category, "Tip category should not be null");
 
     if (status == null) {
-      status = TipStatus.PST;
+      status = TipStatus.POSTED;
     }
 
     this.title = title;

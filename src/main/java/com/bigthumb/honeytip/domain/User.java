@@ -95,7 +95,7 @@ public class User {
 
   public void encryptPassword() {
     BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder(10);
-    password = bcpe.encode(password);
+    this.password = bcpe.encode(this.password);
   }
 
   public void validateInfo() {

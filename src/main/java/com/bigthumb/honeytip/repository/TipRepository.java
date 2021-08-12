@@ -39,12 +39,12 @@ public class TipRepository {
                 (tip.title.likeIgnoreCase(keyword)
                     .or(tip.user.nickname.likeIgnoreCase(keyword))
                     .or(tip.content.likeIgnoreCase(keyword)))
-                    .and(tip.status.notIn(TipStatus.BAN, TipStatus.HID, TipStatus.RMV))
+                    .and(tip.status.notIn(TipStatus.REPORTED, TipStatus.HIDDEN, TipStatus.REMOVED))
             ).fetch();
   }
 
   public void hide(Tip tip) {
-    tip.updateStatus(TipStatus.HID);
+    tip.updateStatus(TipStatus.HIDDEN);
   }
 
   /**
@@ -52,7 +52,7 @@ public class TipRepository {
    * Only admin can erase or un-remove removed tip.
    */
   public void remove(Tip tip) {
-    tip.updateStatus(TipStatus.RMV);
+    tip.updateStatus(TipStatus.REMOVED);
   }
 
   /**

@@ -85,7 +85,7 @@ public class TipService {
   public void deleteById(Long tipId, Long requestUserId) {
     Tip deletableTip = tipRepository.findOne(tipId);
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission"); // TODO: modify HTTP response status
     }
     tipRepository.delete(deletableTip);

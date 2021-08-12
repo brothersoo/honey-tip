@@ -20,7 +20,7 @@ public class CategoryService {
 
   public Long add(Category category, Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     checkDuplicateName(category.getName());
@@ -36,7 +36,7 @@ public class CategoryService {
 
   public void deleteCategory(Long categoryId, Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     Category deletableCategory = categoryRepository.findById(categoryId);

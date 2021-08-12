@@ -1,5 +1,5 @@
 package com.bigthumb.honeytip.domain;
 
 public enum TipStatus {
-  PST, RMV, HID, BAN
+  POSTED, REMOVED, HIDDEN, REPORTED
 }

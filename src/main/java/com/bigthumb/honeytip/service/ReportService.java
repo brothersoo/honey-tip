@@ -23,7 +23,7 @@ public class ReportService {
 
   public List<Report> findAll(Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     return reportRepository.findAll();
@@ -31,7 +31,7 @@ public class ReportService {
 
   public void reject(Report report, Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     reportRepository.reject(report);
@@ -39,7 +39,7 @@ public class ReportService {
 
   public void approve(Report report, Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     reportRepository.approve(report);

@@ -2,7 +2,6 @@ package com.bigthumb.honeytip.repository;
 
 import static com.bigthumb.honeytip.domain.QUser.user;
 
-import com.bigthumb.honeytip.domain.QUser;
 import com.bigthumb.honeytip.domain.User;
 import com.bigthumb.honeytip.domain.UserStatus;
 import com.bigthumb.honeytip.domain.UserType;
@@ -37,7 +36,7 @@ public class UserRepository {
 
   public List<User> findAllMember() {
     JPAQueryFactory query = new JPAQueryFactory(em);
-    return query.selectFrom(user).where(user.type.eq(UserType.MEM)).fetch();
+    return query.selectFrom(user).where(user.type.eq(UserType.MEMBER)).fetch();
   }
 
   public List<User> findByNickname(String keyword) {
@@ -51,7 +50,7 @@ public class UserRepository {
         .selectFrom(user)
         .where(
             user.nickname.likeIgnoreCase("%" + keyword + "%")
-                .and(user.type.eq(UserType.MEM))
+                .and(user.type.eq(UserType.MEMBER))
         )
         .fetch();
   }
@@ -60,14 +59,14 @@ public class UserRepository {
    * Member quit by himself
    */
   public void remove(User user) {
-    user.updateStatus(UserStatus.QUT);
+    user.updateStatus(UserStatus.QUIT);
   }
 
   /**
    * Admin bans a member
    */
   public void ban(User user) {
-    user.updateStatus(UserStatus.BAN);
+    user.updateStatus(UserStatus.BANNED);
   }
 
   /**

@@ -30,10 +30,10 @@ public class ReportRepository {
   }
 
   public void reject(Report report) {
-    report.changeStatus(ReportStatus.REJ);
+    report.changeStatus(ReportStatus.REJECTED);
   }
 
   public void approve(Report report) {
-    report.changeStatus(ReportStatus.APR);
+    report.changeStatus(ReportStatus.APROVED);
   }
 }

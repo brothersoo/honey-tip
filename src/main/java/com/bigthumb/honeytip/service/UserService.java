@@ -5,11 +5,13 @@ import com.bigthumb.honeytip.domain.UserType;
 import com.bigthumb.honeytip.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional
 public class UserService {
 
@@ -26,7 +28,7 @@ public class UserService {
   @Transactional(readOnly = true)
   public List<User> findAllUser(Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     return userRepository.findAll();
@@ -35,7 +37,7 @@ public class UserService {
   @Transactional(readOnly = true)
   public List<User> findAllMember(Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     return userRepository.findAllMember();
@@ -49,7 +51,7 @@ public class UserService {
   @Transactional(readOnly = true)
   public List<User> searchByNickname(String nickname, Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     return userRepository.findByNickname(nickname);
@@ -67,7 +69,7 @@ public class UserService {
 
   public void ban(Long userId, Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     User banableUser = userRepository.findById(userId);
@@ -76,7 +78,7 @@ public class UserService {
 
   public void delete(Long userId, Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
-    if (!requestUser.getType().equals(UserType.ADM)) {
+    if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
     }
     User deletableUser = userRepository.findById(userId);
