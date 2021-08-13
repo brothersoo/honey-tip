@@ -2,10 +2,12 @@ package com.bigthumb.honeytip.service;
 
 import com.bigthumb.honeytip.domain.User;
 import com.bigthumb.honeytip.domain.UserType;
+import com.bigthumb.honeytip.dto.UserSignupDto;
 import com.bigthumb.honeytip.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final PasswordEncoder bCryptPasswordEncoder;
 
-  public Long join(User user) {
-    checkDuplicateUsername(user.getUsername());
-    user.validateInfo();
-    user.encryptPassword();
+  public Long join(UserSignupDto userSignupDto) {
+    User user = new User(userSignupDto);
+    user.encryptPassword(bCryptPasswordEncoder.encode(user.getPassword()));
     userRepository.save(user);
     return user.getId();
   }
@@ -49,7 +51,7 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public List<User> searchByNickname(String nickname, Long requestUserId) {
+  public User searchByNickname(String nickname, Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
     if (!requestUser.getType().equals(UserType.ADMIN)) {
       throw new IllegalArgumentException("This user has no permission");
@@ -83,11 +85,5 @@ public class UserService {
     }
     User deletableUser = userRepository.findById(userId);
     userRepository.remove(deletableUser);
-  }
-
-  private void checkDuplicateUsername(String username) {
-    if (userRepository.findByUsername(username) != null) {
-      throw new IllegalStateException("Already existing email");
-    }
   }
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Honey Tip</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div class="jumbotron">
+        <h1>Honey Tip</h1>
+        <p class="lead">회원 기능</p>
+        <p>
+            <a class="btn btn-lg btn-secondary" href="/auth/signup">회원 가입</a>
+            <a class="btn btn-lg btn-secondary" href="/auth/login">로그인</a>
+        </p>
+        <p class="lead">꿀팁 기능</p>
+        <p>
+            <a class="btn btn-lg btn-dark" href="/tip/new">꿀팁 등록</a>
+            <a class="btn btn-lg btn-dark" href="/tip/tips">꿀팁 목록</a>
+        </p>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>

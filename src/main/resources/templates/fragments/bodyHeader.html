@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div class="header" th:fragment="bodyHeader">
+  <ul class="nav nav-pills pull-right">
+    <li><a href="/">Home</a></li>
+  </ul>
+  <a href="/"><h3 class="text-muted">Honey Tip</h3></a>
+  <!-- 익명의 사용자 -->
+  <a sec:authorize="isAnonymous()" th:href="@{/auth/login}">login</a>
+  <a sec:authorize="isAnonymous()" th:href="@{/auth/signup}">sign up</a>
+
+  <!-- 인증된 사용자 -->
+  <a sec:authorize="isAuthenticated()" th:href="@{/auth/logout}">logout</a>
+
+  <!-- 특정 권한의 사용자 -->
+  <a sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/auth/mypage}">My page</a>
+  <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/auth/admin}">Admin</a>
+
+</div>
+</html>

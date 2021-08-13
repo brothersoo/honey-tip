@@ -1,5 +1,6 @@
 package com.bigthumb.honeytip.domain;
 
+import com.bigthumb.honeytip.dto.UserSignupDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,16 @@ public class User {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
   private List<Report> reports;
 
+  public User(UserSignupDto userRequestDto) {
+    this.username = userRequestDto.getUsername();
+    this.password = userRequestDto.getPassword();
+    this.nickname = userRequestDto.getNickname();
+    this.type = UserType.MEMBER;
+    this.status = UserStatus.ACTIVATE;
+    this.tips = new ArrayList<>();
+    this.reports = new ArrayList<>();
+  }
+
   @Builder
   public User(String username, String nickname, String password, UserType type,
       UserStatus status) {
@@ -84,24 +95,11 @@ public class User {
     this.reports = new ArrayList<>();
   }
 
+  public void encryptPassword(String encryptedPassword) {
+    this.password = encryptedPassword;
+  }
+
   public void updateStatus(UserStatus status) {
     this.status = status;
-  }
-
-  public void encryptPassword() {
-    BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder(10);
-    this.password = bcpe.encode(this.password);
-  }
-
-  public void validateInfo() {
-    if (username.length() < 3 || username.length() > 30) {
-      throw new IllegalStateException("User name should be length between 3 to 30");
-    }
-    if (password.length() < 8 || password.length() > 23) {
-      throw new IllegalStateException("User password should be length between 8 to 23");
-    }
-    if (nickname.length() < 2 || nickname.length() > 16) {
-      throw new IllegalStateException("User nickname should be length between 2 to 16");
-    }
   }
 }

@@ -7,6 +7,7 @@ import com.bigthumb.honeytip.domain.UserStatus;
 import com.bigthumb.honeytip.domain.UserType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -39,9 +40,9 @@ public class UserRepository {
     return query.selectFrom(user).where(user.type.eq(UserType.MEMBER)).fetch();
   }
 
-  public List<User> findByNickname(String keyword) {
+  public User findByNickname(String nickname) {
     JPAQueryFactory query = new JPAQueryFactory(em);
-    return query.selectFrom(user).where(user.nickname.likeIgnoreCase("%" + keyword + "%")).fetch();
+    return query.selectFrom(user).where(user.nickname.eq(nickname)).fetchOne();
   }
 
   public List<User> findMemberByNickname(String keyword) {
