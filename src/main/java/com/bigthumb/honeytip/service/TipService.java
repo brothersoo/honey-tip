@@ -3,10 +3,13 @@ package com.bigthumb.honeytip.service;
 import com.bigthumb.honeytip.domain.Category;
 import com.bigthumb.honeytip.domain.Tip;
 import com.bigthumb.honeytip.domain.User;
+import com.bigthumb.honeytip.domain.UserStatus;
 import com.bigthumb.honeytip.domain.UserType;
+import com.bigthumb.honeytip.dto.TipDto;
 import com.bigthumb.honeytip.repository.CategoryRepository;
 import com.bigthumb.honeytip.repository.TipRepository;
 import com.bigthumb.honeytip.repository.UserRepository;
+import com.bigthumb.honeytip.validator.TipValidator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +24,16 @@ public class TipService {
   private final CategoryRepository categoryRepository;
   private final UserRepository userRepository;
 
-  public void createTip(Tip tip) {
+  private final TipValidator tipValidator;
+
+  public Long createTip(TipDto tipDto, String writerName) {
+    Tip tip = new Tip(tipDto);
+    User writer = userRepository.findByUsername(writerName);
+    tipValidator.validateWriter(writer, tip);
+    Category category = categoryRepository.findByName(tipDto.getCategoryName());
+    tipValidator.validateCategory(category, tip);
     tipRepository.save(tip);
+    return tip.getId();
   }
 
   /**
@@ -47,7 +58,8 @@ public class TipService {
     return tipRepository.findByCondition(keyword);
   }
 
-  public Tip updateTip(Long id, Long requestUserId, String title, String content, String categoryName) {
+  public Tip updateTip(Long id, Long requestUserId, String title, String content,
+      String categoryName) {
     Tip updatableTip = tipRepository.findOne(id);
     if (!updatableTip.getUser().getId().equals(requestUserId)) {
       throw new IllegalArgumentException("No permission for this request user");
@@ -86,7 +98,8 @@ public class TipService {
     Tip deletableTip = tipRepository.findOne(tipId);
     User requestUser = userRepository.findById(requestUserId);
     if (!requestUser.getType().equals(UserType.ADMIN)) {
-      throw new IllegalArgumentException("This user has no permission"); // TODO: modify HTTP response status
+      throw new IllegalArgumentException(
+          "This user has no permission"); // TODO: modify HTTP response status
     }
     tipRepository.delete(deletableTip);
   }

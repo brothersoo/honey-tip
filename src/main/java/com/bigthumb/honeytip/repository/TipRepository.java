@@ -1,7 +1,10 @@
 package com.bigthumb.honeytip.repository;
 
 import static com.bigthumb.honeytip.domain.QTip.tip;
+import static com.bigthumb.honeytip.domain.QUser.user;
 
+import com.bigthumb.honeytip.domain.QTip;
+import com.bigthumb.honeytip.domain.QUser;
 import com.bigthumb.honeytip.domain.Tip;
 import com.bigthumb.honeytip.domain.TipStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,7 +24,13 @@ public class TipRepository {
   }
 
   public Tip findOne(Long id) {
-    return em.find(Tip.class, id);
+    JPAQueryFactory query = new JPAQueryFactory(em);
+    return (Tip) query.from(tip)
+        .leftJoin(tip.user, user)
+        .fetchJoin()
+        .where(tip.user.eq(user)
+            .and(tip.id.eq(id)))
+        .fetchOne();
   }
 
   public List<Tip> findAll() {

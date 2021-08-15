@@ -9,9 +9,25 @@
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
     <div class="jumbotron">
         <h1>꿀팁 작성하기</h1>
-        <form method="post" action="/tip/newProcess">
-            <p><input type="text" name="title"><p>
-            <p><input type="textarea" size="100" name="content"><p>
+        <form th:action="@{/tip/newProcess}" th:object="${tip}" method="post">
+            <div>
+                <label th:for="title">제목</label>
+                <input th:field="*{title}" type="text" required>
+            </div>
+
+            <div>
+                <label th:for="category">카테고리</label>
+                <select class="select_type01 w170" th:field="*{categoryName}">
+                    <option th:each="category : ${categories}"
+                            th:value="${category.name}" th:utext="${category.name}"></option>
+                </select>
+            </div>
+
+            <div>
+                <label th:for="content">꿀팁</label>
+                <textarea th:field="*{content}" name="content" cols="30" rows="5" required></textarea>
+            </div>
+
             <button class="btn btn-outline-info my-2 my-sm-0 btn-sm">Submit</button>
         </form>
     </div>

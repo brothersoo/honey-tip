@@ -1,5 +1,6 @@
 package com.bigthumb.honeytip.domain;
 
+import com.bigthumb.honeytip.dto.TipDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,21 @@ public class Tip {
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "tip")
   private List<Report> reports;
+
+  public Tip(TipDto tipDto) {
+    this.title = tipDto.getTitle();
+    this.content = tipDto.getContent();
+    this.status = TipStatus.POSTED;
+    this.reports = new ArrayList<>();
+  }
+
+  public void setWriter(User writer) {
+    this.user = writer;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
+  }
 
   @Builder
   public Tip(String title, String content, User user, Category category, TipStatus status) {

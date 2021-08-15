@@ -18,11 +18,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="tip : ${tips}">
-                <td th:text="${tip.title}"
-                    th:href="@{/tip/{id} (id=${tip.id})}"></td>
+            <tr th:each="tip : ${tips}"
+                th:onclick="'window.location.href = \'' + @{/tip/{id}(id=${tip.id})} + '\''"
+                th:onmouseover="background: #000">
+                <td th:text="${tip.title}"></td>
                 <td th:text="${tip.user.nickname}"></td>
-                <td th:text="${item.createdAt}"></td>
+                <td th:text="${tip.createdAt}"></td>
             </tr>
             </tbody>
         </table>

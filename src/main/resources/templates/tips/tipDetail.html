@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+  <title>Detail</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader" />
+  <div class="jumbotron">
+    <h3 th:text="${tip.title}" style="text-align:left"></h3>
+    <br>
+    <br>
+    <h3 th:text="${tip.content}" style="text-align:left"></h3>
+    <br>
+    <br>
+    <br>
+
+    <div>
+      <p th:text="'작성자 : ' + ${tip.user.nickname}" style="text-align:right"></p>
+      <br>
+      <p th:text="'작성일 : ' + ${tip.createdAt}" style="text-align:right"></p>
+    </div>
+  </div>
+  <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>
