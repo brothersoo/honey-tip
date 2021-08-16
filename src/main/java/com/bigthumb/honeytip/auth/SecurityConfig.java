@@ -2,30 +2,23 @@ package com.bigthumb.honeytip.auth;
 
 import com.bigthumb.honeytip.domain.UserType;
 import com.bigthumb.honeytip.service.AuthService;
-import com.bigthumb.honeytip.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private final AuthenticationProvider authenticationProvider;
-  private final AuthenticationSuccessHandler authenticationSuccessHandler;
-  private final AuthenticationFailureHandler authenticationFailureHandler;
+  private final MyAuthenticationProvider authenticationProvider;
+  private final MyAuthenticationSuccessHandler authenticationSuccessHandler;
+  private final MyAuthenticationFailureHandler authenticationFailureHandler;
   private final AuthService authService;
 
   @Bean
