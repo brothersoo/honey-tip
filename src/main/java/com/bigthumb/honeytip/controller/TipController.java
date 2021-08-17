@@ -1,23 +1,17 @@
 package com.bigthumb.honeytip.controller;
 
-import com.bigthumb.honeytip.auth.MyUserDetails;
 import com.bigthumb.honeytip.domain.Category;
 import com.bigthumb.honeytip.domain.Tip;
 import com.bigthumb.honeytip.dto.TipDto;
 import com.bigthumb.honeytip.service.CategoryService;
 import com.bigthumb.honeytip.service.TipService;
-import com.bigthumb.honeytip.validator.TipValidator;
-import java.security.Principal;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +42,7 @@ public class TipController {
 
   @PostMapping("/newProcess")
   public String newProcess(TipDto tipDto, @AuthenticationPrincipal String writer, BindingResult result) {
-    Long newTipId = tipService.createTip(tipDto, writer);
+    tipService.createTip(tipDto, writer);
     return "redirect:/tip/tips";
   }
 

@@ -2,6 +2,7 @@ package com.bigthumb.honeytip.service;
 
 import com.bigthumb.honeytip.domain.User;
 import com.bigthumb.honeytip.domain.UserType;
+import com.bigthumb.honeytip.dto.UserModificationDto;
 import com.bigthumb.honeytip.dto.UserSignupDto;
 import com.bigthumb.honeytip.repository.UserRepository;
 import java.util.List;
@@ -50,6 +51,9 @@ public class UserService {
     return userRepository.findById(userId);
   }
 
+  /**
+   * Find every users including admin
+   */
   @Transactional(readOnly = true)
   public User searchByNickname(String nickname, Long requestUserId) {
     User requestUser = userRepository.findById(requestUserId);
@@ -59,9 +63,20 @@ public class UserService {
     return userRepository.findByNickname(nickname);
   }
 
+  /**
+   * Find users except admins
+   */
   @Transactional(readOnly = true)
   public List<User> searchMemberByNickname(String nickname) {
     return userRepository.findMemberByNickname(nickname);
+  }
+
+  public void modifyUserInfo(String requestUsername, UserModificationDto userDto) {
+    User user = userRepository.findByUsername(requestUsername);
+    if (userDto.getPassword() != null) {
+      userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+    }
+    user.modifyUserInfo(userDto);
   }
 
   public void dropOut(Long requestUserId) {

@@ -1,5 +1,6 @@
 package com.bigthumb.honeytip.domain;
 
+import com.bigthumb.honeytip.dto.UserModificationDto;
 import com.bigthumb.honeytip.dto.UserSignupDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 
 @Entity
@@ -101,5 +101,10 @@ public class User {
 
   public void updateStatus(UserStatus status) {
     this.status = status;
+  }
+
+  public void modifyUserInfo(UserModificationDto userModificationDto) {
+    if (userModificationDto.getPassword() != null) this.password = userModificationDto.getPassword();
+    if (userModificationDto.getNickname() != null) this.nickname = userModificationDto.getNickname();
   }
 }

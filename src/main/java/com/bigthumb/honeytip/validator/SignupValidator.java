@@ -30,7 +30,8 @@ public class SignupValidator implements Validator {
 
     if (user.getPassword().length() < 8 || user.getPassword().length() > 23) {
       errors.rejectValue("password", "key", "8자 이상 23자 이하이어야 합니다.");
-    } else if (!Objects.equals(user.getPassword(), user.getPasswordConfirm())) {
+    }
+    if (!Objects.equals(user.getPassword(), user.getPasswordConfirm())) {
       errors.rejectValue("passwordConfirm", "key", "다시한번 확인해주세요");
     }
 
@@ -39,5 +40,7 @@ public class SignupValidator implements Validator {
     } else if (userRepository.findByNickname(user.getNickname()) != null) {
       errors.rejectValue("nickname", "key", "이미 존재하는 닉네임입니다.");
     }
+
+    // TODO: merge user finding query into one
   }
 }

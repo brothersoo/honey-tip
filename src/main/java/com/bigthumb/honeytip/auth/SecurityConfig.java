@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.authorizeRequests()
         .antMatchers("/").permitAll()
         .antMatchers("/auth/mypage").hasRole(UserType.MEMBER.toString())
+        .antMatchers("/auth/modification").hasRole(UserType.MEMBER.toString())
         .antMatchers("/tip/new").hasRole(UserType.MEMBER.toString())
         .antMatchers("/auth/signup").anonymous()
 
@@ -77,10 +78,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         /* Provider used on authentication request */
         .and()
-        .authenticationProvider(authenticationProvider);
+        .authenticationProvider(authenticationProvider)
 
         /* cross site request forgery is disabled */
-        http.csrf().disable();
+        .csrf().disable();
   }
 
   @Override

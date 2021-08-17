@@ -28,7 +28,7 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     Boolean passowrdMatches = passwordEncoder.matches(password, user.getPassword());
 
-    if (user == null || !passowrdMatches) return null;
+    if (!passowrdMatches) return null;
     else return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
   }
 

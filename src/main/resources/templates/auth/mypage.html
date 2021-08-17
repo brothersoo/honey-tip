@@ -9,15 +9,15 @@
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
     <div class="jumbotron">
         <h1>Honey Tip</h1>
+        <h3 th:text="'Hello ' + ${nickname}+ '!'"></h3>
         <p class="lead">회원 기능</p>
         <p>
-            <a class="btn btn-lg btn-secondary" href="/auth/signup">회원 가입</a>
-            <a class="btn btn-lg btn-secondary" href="/auth/login">로그인</a>
+            <a class="btn btn-lg btn-secondary" href="/auth/modification">정보 수정</a>
+            <a class="btn btn-lg btn-secondary" href="/auth/quit">회원 탈퇴</a>
         </p>
         <p class="lead">꿀팁 기능</p>
         <p>
-            <a class="btn btn-lg btn-dark" href="/tip/new">꿀팁 등록</a>
-            <a class="btn btn-lg btn-dark" href="/tip/tips">꿀팁 목록</a>
+            <a class="btn btn-lg btn-dark" href="/tip/my_tips">내가 쓴 꿀팁</a>
         </p>
     </div>
     <div th:replace="fragments/footer :: footer" />
