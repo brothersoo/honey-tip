@@ -3,15 +3,18 @@ package com.bigthumb.honeytip.repository;
 import static com.bigthumb.honeytip.domain.QTip.tip;
 import static com.bigthumb.honeytip.domain.QUser.user;
 
-import com.bigthumb.honeytip.domain.QTip;
-import com.bigthumb.honeytip.domain.QUser;
 import com.bigthumb.honeytip.domain.Tip;
 import com.bigthumb.honeytip.domain.TipStatus;
+import com.bigthumb.honeytip.filter.TipFilter;
+import com.github.javafaker.Bool;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,6 +39,21 @@ public class TipRepository {
   public List<Tip> findAll() {
     JPAQueryFactory query = new JPAQueryFactory(em);
     return query.selectFrom(tip).fetch();
+  }
+
+  public List<Tip> findByFilter(TipFilter filter) {
+    JPAQueryFactory query = new JPAQueryFactory(em);
+
+    return query
+        .selectFrom(tip)
+        .where(
+            filter.likeIgnoreCaseTitle(),
+            filter.likeIgnoreCaseNickname(),
+            filter.likeIgnoreCaseContent(),
+            filter.eqCategory(),
+            filter.betweenCreatedAt(),
+            tip.status.notIn(TipStatus.HIDDEN, TipStatus.REMOVED)
+        ).fetch();
   }
 
   public List<Tip> findByCondition(String keyword) {

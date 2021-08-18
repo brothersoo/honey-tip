@@ -6,6 +6,7 @@ import com.bigthumb.honeytip.domain.User;
 import com.bigthumb.honeytip.domain.UserStatus;
 import com.bigthumb.honeytip.domain.UserType;
 import com.bigthumb.honeytip.dto.TipDto;
+import com.bigthumb.honeytip.filter.TipFilter;
 import com.bigthumb.honeytip.repository.CategoryRepository;
 import com.bigthumb.honeytip.repository.TipRepository;
 import com.bigthumb.honeytip.repository.UserRepository;
@@ -52,6 +53,12 @@ public class TipService {
   /**
    * for user page
    */
+
+  @Transactional(readOnly = true)
+  public List<Tip> findByFilter(TipFilter filter) {
+    return tipRepository.findByFilter(filter);
+  }
+
   @Transactional(readOnly = true)
   public List<Tip> findByCondition(String keyword) {
 

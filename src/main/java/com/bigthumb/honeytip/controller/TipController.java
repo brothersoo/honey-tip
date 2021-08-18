@@ -3,6 +3,7 @@ package com.bigthumb.honeytip.controller;
 import com.bigthumb.honeytip.domain.Category;
 import com.bigthumb.honeytip.domain.Tip;
 import com.bigthumb.honeytip.dto.TipDto;
+import com.bigthumb.honeytip.filter.TipFilter;
 import com.bigthumb.honeytip.service.CategoryService;
 import com.bigthumb.honeytip.service.TipService;
 import java.util.List;
@@ -25,8 +26,10 @@ public class TipController {
   private final CategoryService categoryService;
 
   @GetMapping("/tips")
-  public String list(Model model) {
-    List<Tip> tips = tipService.findAll();
+  public String list(
+      Model model,
+      TipFilter filter) {
+    List<Tip> tips = tipService.findByFilter(filter);
     model.addAttribute("tips", tips);
     return "/tips/tipList";
   }

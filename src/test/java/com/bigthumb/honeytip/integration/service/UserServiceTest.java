@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.bigthumb.honeytip.domain.User;
 import com.bigthumb.honeytip.domain.UserType;
+import com.bigthumb.honeytip.dto.UserSignupDto;
+import com.bigthumb.honeytip.repository.UserRepository;
 import com.bigthumb.honeytip.service.UserService;
 import com.github.javafaker.Faker;
 import java.util.List;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TestPropertySource("classpath:application-test.properties")
 public class UserServiceTest {
 
-  @Autowired UserService 사용자서비스;
+  @Autowired
+  UserService 사용자서비스;
+  @Autowired
+  UserRepository 사용자저장소;
+  @Autowired
+  BCryptPasswordEncoder 비밀번호인코더;
 
   static Faker faker;
   static Faker koFaker;
@@ -37,38 +45,46 @@ public class UserServiceTest {
   @DisplayName("회원가입")
   void signIn() {
     // given
-    User 신규회원 = User.builder()
-        .username(koFaker.name().username())
+    String 비밀번호 = faker.lorem().characters(8, 20);
+    UserSignupDto 회원가입데이터 = UserSignupDto.builder()
+        .username(faker.name().username())
         .nickname(faker.leagueOfLegends().champion())
-        .password(faker.lorem().characters(8, 20))
+        .password(비밀번호)
+        .passwordConfirm(비밀번호)
         .build();
 
     // when
-    Long 신규회원번호 = 사용자서비스.join(신규회원);
+    Long 신규회원번호 = 사용자서비스.join(회원가입데이터);
 
     //then
-    assertThat(사용자서비스.searchUserById(신규회원번호)).isEqualTo(신규회원);
+    assertThat(사용자서비스.searchUserById(신규회원번호).getUsername()).isEqualTo(회원가입데이터.getUsername());
+    assertThat(사용자서비스.searchUserById(신규회원번호).getNickname()).isEqualTo(회원가입데이터.getNickname());
+    assertThat(비밀번호인코더.matches(회원가입데이터.getPassword(), 사용자서비스.searchUserById(신규회원번호).getPassword())).isTrue();
   }
 
+  /* TODO 회원가입  validation testing 이동
   @Test
   @DisplayName("중복 유저명 회원가입 실패")
   void failSignInDueToDuplicateUsername() {
     // given
     String 유저명 = "Honey Tip";
-    User 기존회원 = User.builder()
+    String 비밀번호 = faker.lorem().characters(8, 20);
+    UserSignupDto 기존회원데이터 = UserSignupDto.builder()
         .username(유저명)
         .nickname(faker.leagueOfLegends().champion())
-        .password(faker.lorem().characters(8, 20))
+        .password(비밀번호)
+        .passwordConfirm(비밀번호)
         .build();
-    사용자서비스.join(기존회원);
-    User 신규회원 = User.builder()
+    사용자서비스.join(기존회원데이터);
+    UserSignupDto 중복유저명회원데이터 = UserSignupDto.builder()
         .username(유저명)
         .nickname(faker.leagueOfLegends().champion())
-        .password(faker.lorem().characters(8, 20))
+        .password(비밀번호)
+        .passwordConfirm(비밀번호)
         .build();
 
     // when then throws
-    assertThrows(IllegalStateException.class, () -> 사용자서비스.join(신규회원));
+    assertThrows(IllegalStateException.class, () -> 사용자서비스.join(중복유저명회원데이터));
   }
 
   @Test
@@ -76,14 +92,16 @@ public class UserServiceTest {
   void shortNameLength() {
     // given
     String 너무짧은이름 = koFaker.lorem().characters(2);
-    User 신규회원 = User.builder()
+    String 비밀번호 = faker.lorem().characters(8, 20);
+    UserSignupDto 회원가입데이터 = UserSignupDto.builder()
         .username(너무짧은이름)
         .nickname(faker.leagueOfLegends().champion())
-        .password(faker.lorem().characters(8, 20))
+        .password(비밀번호)
+        .passwordConfirm(비밀번호)
         .build();
 
     // when then throws
-    assertThrows(IllegalStateException.class, () -> 사용자서비스.join(신규회원));
+    assertThrows(IllegalStateException.class, () -> 사용자서비스.join(회원가입데이터));
   }
 
   @Test
@@ -181,6 +199,7 @@ public class UserServiceTest {
     // when then throws
     assertThrows(IllegalStateException.class, () -> 사용자서비스.join(신규회원));
   }
+   */
 
   @Test
   @DisplayName("전체 유저 검색 - 관리자 포함")
@@ -242,7 +261,7 @@ public class UserServiceTest {
         .password(faker.lorem().characters(8, 20))
         .type(UserType.ADMIN)
         .build();
-    사용자서비스.join(관리자);
+    사용자저장소.save(관리자);
     return 관리자;
   }
 
@@ -252,7 +271,7 @@ public class UserServiceTest {
         .nickname(faker.leagueOfLegends().champion())
         .password(faker.lorem().characters(8, 20))
         .build();
-    사용자서비스.join(사용자);
+    사용자저장소.save(사용자);
     return 사용자;
   }
 }

@@ -71,28 +71,15 @@ class UserRepositoryTest {
     User 김검색 = User.builder()
         .username(koFaker.name().username())
         .password(faker.crypto().sha256())
-        .nickname("김검색")
-        .build();
-    User 이검색 = User.builder()
-        .username(koFaker.name().username())
-        .password(faker.crypto().sha256())
-        .nickname("이검색")
-        .build();
-    User 박검색 = User.builder()
-        .username(koFaker.name().username())
-        .password(faker.crypto().sha256())
-        .nickname("박검색")
+        .nickname("검색")
         .build();
     사용자저장소.save(김검색);
-    사용자저장소.save(이검색);
-    사용자저장소.save(박검색);
 
     // when
-    List<User> 검색이들 = 사용자저장소.findByNickname("검색");
+    User 검색사용자 = 사용자저장소.findByNickname("검색");
 
     //then
-    assertThat(검색이들.size()).isEqualTo(3);
-    assertThat(검색이들).containsSequence(김검색, 이검색, 박검색);
+    assertThat(검색사용자).isEqualTo(김검색);
   }
 
   @Test

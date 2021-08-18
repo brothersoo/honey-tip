@@ -7,10 +7,13 @@ import com.bigthumb.honeytip.domain.Tip;
 import com.bigthumb.honeytip.domain.TipStatus;
 import com.bigthumb.honeytip.domain.User;
 import com.bigthumb.honeytip.domain.UserType;
+import com.bigthumb.honeytip.filter.TipFilter;
 import com.bigthumb.honeytip.repository.CategoryRepository;
 import com.bigthumb.honeytip.repository.TipRepository;
 import com.bigthumb.honeytip.repository.UserRepository;
 import com.github.javafaker.Faker;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import org.junit.jupiter.api.BeforeAll;
@@ -93,6 +96,10 @@ class TipRepositoryTest {
     // given
     User 사용자 = fakeMember();
     Category 카테고리 = fakeCategory();
+    Category 검색카테고리 = Category.builder()
+        .name("검색")
+        .build();
+    카테고리저장소.save(검색카테고리);
     createNTips(10, 사용자, 카테고리);
     User 김검색 = User.builder()
         .username(faker.name().username())
@@ -100,39 +107,68 @@ class TipRepositoryTest {
         .password(faker.crypto().sha256())
         .build();
     사용자저장소.save(김검색);
-    Tip 검색팁1 = Tip.builder()
+    Tip 제목검색팁 = Tip.builder()
         .title("검색 잘하는 꿀팁")
         .content(faker.lorem().paragraph())
         .user(사용자)
         .category(카테고리)
         .build();
-    Tip 검색팁2 = Tip.builder()
+    Tip 내용검색팁 = Tip.builder()
         .title(faker.name().title())
         .content("이것은 검색기능이 정상적으로 작동하는지 확인하기 위해 만들어진 검색용 문장입니다.")
         .user(사용자)
         .category(카테고리)
         .build();
-    Tip 검색팁3 = Tip.builder()
+    Tip 닉네임검색팁 = Tip.builder()
         .title(faker.name().title())
         .content(faker.lorem().paragraph())
         .user(김검색)
         .category(카테고리)
         .build();
-    팁저장소.save(검색팁1);
-    팁저장소.save(검색팁2);
-    팁저장소.save(검색팁3);
+    Tip 카테고리검색팁 = Tip.builder()
+        .title(faker.name().title())
+        .content(faker.lorem().paragraph())
+        .user(사용자)
+        .category(검색카테고리)
+        .build();
+    팁저장소.save(제목검색팁);
+    팁저장소.save(내용검색팁);
+    팁저장소.save(닉네임검색팁);
+    팁저장소.save(카테고리검색팁);
+
+    TipFilter 작성자닉네임필터 = TipFilter.builder().nickname("검색").build();
+    TipFilter 제목필터 = TipFilter.builder().title("검색").build();
+    TipFilter 내용필터 = TipFilter.builder().content("검색").build();
+    TipFilter 카테고리필터 = TipFilter.builder().category("검색").build();
+    TipFilter 작성일필터 = TipFilter.builder()
+        .createdAtFrom(LocalDate.now().minusDays(1))
+        .createdAtTo(LocalDate.now().plusDays(1))
+        .build();
+
 
     // when
-    List<Tip> 검색팁리스트 = 팁저장소.findByCondition("검색");
+    List<Tip> 닉네임필터_팁리스트 = 팁저장소.findByFilter(작성자닉네임필터);
+    List<Tip> 제목필터_팁리스트 = 팁저장소.findByFilter(제목필터);
+    List<Tip> 내용필터_팁리스트 = 팁저장소.findByFilter(내용필터);
+    List<Tip> 카테고리필터_팁리스트 = 팁저장소.findByFilter(카테고리필터);
+    List<Tip> 작성일필터_팁리스트 = 팁저장소.findByFilter(작성일필터);
 
     //then
-    assertThat(검색팁리스트).containsSequence(검색팁1, 검색팁2, 검색팁3);
-    assertThat(검색팁리스트.size()).isEqualTo(3);
+    assertThat(닉네임필터_팁리스트).contains(닉네임검색팁);
+    assertThat(닉네임필터_팁리스트.size()).isEqualTo(1);
+    assertThat(제목필터_팁리스트).contains(제목검색팁);
+    assertThat(제목필터_팁리스트.size()).isEqualTo(1);
+    assertThat(내용필터_팁리스트).contains(내용검색팁);
+    assertThat(내용필터_팁리스트.size()).isEqualTo(1);
+    assertThat(카테고리필터_팁리스트).contains(카테고리검색팁);
+    assertThat(카테고리필터_팁리스트.size()).isEqualTo(1);
+    assertThat(작성일필터_팁리스트).contains(닉네임검색팁, 제목검색팁, 내용검색팁, 카테고리검색팁);
+    assertThat(작성일필터_팁리스트.size()).isEqualTo(4 + 10);
   }
 
   @Test
   @DisplayName("신고된, 숨김처리된, 삭제된 팁은 보여지지 않는다")
-  void excludeBAN_HID_RMV() {
+  void contain_RPORTED_n_exclude_HIDDEN_REMVOVED() {
     // given
     User 사용자 = fakeMember();
     Category 카테고리 = fakeCategory();
@@ -144,10 +180,11 @@ class TipRepositoryTest {
     팁저장소.save(삭제팁);
 
     // when
-    List<Tip> 전체팁리스트 = 팁저장소.findByCondition("");
+    TipFilter 빈필터 = TipFilter.builder().build();
+    List<Tip> 전체팁리스트 = 팁저장소.findByFilter(빈필터);
 
     //then
-    assertThat(전체팁리스트).doesNotContain(신고팁, 숨긴팁, 삭제팁);
+    assertThat(전체팁리스트).contains(신고팁).doesNotContain(숨긴팁, 삭제팁);
   }
 
   @Test
@@ -201,8 +238,8 @@ class TipRepositoryTest {
     Faker koFaker = new Faker(new Locale("ko"));
     for (int i = 0; i < n; i++) {
       Tip 새팁 = Tip.builder()
-          .title(koFaker.name().title())
-          .content(koFaker.lorem().paragraph())
+          .title(faker.name().title())
+          .content(String.join("", faker.lorem().sentences(3)))
           .user(작성자)
           .category(팁카테고리)
           .build();

@@ -60,9 +60,13 @@ public class AuthController {
   }
 
   @GetMapping("/mypage")
-  public String mypage(@AuthenticationPrincipal String requestUsername, Model model) {
+  public String mypage(
+      @AuthenticationPrincipal String requestUsername,
+      Model model) {
     User user = userRepository.findByUsername(requestUsername);
     model.addAttribute("nickname", user.getNickname());
+    model.addAttribute("username", user.getUsername());
+
     return "/auth/mypage";
   }
 

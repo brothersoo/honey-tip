@@ -17,7 +17,7 @@
         </p>
         <p class="lead">꿀팁 기능</p>
         <p>
-            <a class="btn btn-lg btn-dark" href="/tip/my_tips">내가 쓴 꿀팁</a>
+            <a class="btn btn-lg btn-dark" th:href="'/tip/tips?username=' + ${username}">내가 쓴 꿀팁</a>
         </p>
     </div>
     <div th:replace="fragments/footer :: footer" />
