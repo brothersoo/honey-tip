@@ -141,8 +141,8 @@ class TipRepositoryTest {
     TipFilter 내용필터 = TipFilter.builder().content("검색").build();
     TipFilter 카테고리필터 = TipFilter.builder().category("검색").build();
     TipFilter 작성일필터 = TipFilter.builder()
-        .createdAtFrom(LocalDate.now().minusDays(1))
-        .createdAtTo(LocalDate.now().plusDays(1))
+        .from(LocalDate.now().minusDays(1))
+        .to(LocalDate.now().plusDays(1))
         .build();
 
 
