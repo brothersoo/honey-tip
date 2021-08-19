@@ -3,9 +3,9 @@ package com.bigthumb.honeytip.service;
 import com.bigthumb.honeytip.domain.Category;
 import com.bigthumb.honeytip.domain.Tip;
 import com.bigthumb.honeytip.domain.User;
-import com.bigthumb.honeytip.domain.UserStatus;
 import com.bigthumb.honeytip.domain.UserType;
 import com.bigthumb.honeytip.dto.TipDto;
+import com.bigthumb.honeytip.exception.NoPermissionException;
 import com.bigthumb.honeytip.filter.TipFilter;
 import com.bigthumb.honeytip.repository.CategoryRepository;
 import com.bigthumb.honeytip.repository.TipRepository;
@@ -65,17 +65,16 @@ public class TipService {
     return tipRepository.findByCondition(keyword);
   }
 
-  public Tip updateTip(Long id, Long requestUserId, String title, String content,
-      String categoryName) {
-    Tip updatableTip = tipRepository.findOne(id);
-    if (!updatableTip.getUser().getId().equals(requestUserId)) {
+  public Tip updateTip(Long tipId, String requestUsername, TipDto updateDto) {
+    Tip updatableTip = tipRepository.findOne(tipId);
+    if (!updatableTip.getUser().getUsername().equals(requestUsername)) {
       throw new IllegalArgumentException("No permission for this request user");
     }
-    Category changableCategory = categoryRepository.findByName(categoryName);
+    Category changableCategory = categoryRepository.findByName(updateDto.getCategoryName());
     if (changableCategory == null) {
       throw new IllegalArgumentException("No category name matching");
     }
-    updatableTip.updateInfo(title, content, changableCategory);
+    updatableTip.updateInfo(updateDto.getTitle(), updateDto.getContent(), changableCategory);
     return updatableTip;
   }
 
@@ -90,10 +89,10 @@ public class TipService {
   /**
    * self removal
    */
-  public void removeById(Long tipId, Long requestUserId) {
+  public void removeById(Long tipId, String requestUsername) {
     Tip removableTip = tipRepository.findOne(tipId);
-    if (!removableTip.getUser().getId().equals(requestUserId)) {
-      throw new IllegalArgumentException("No permission for this request user");
+    if (!removableTip.getUser().getUsername().equals(requestUsername)) {
+      throw new NoPermissionException("You do not have permission.");
     }
     tipRepository.remove(removableTip);
   }

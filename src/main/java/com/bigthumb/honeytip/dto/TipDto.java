@@ -1,8 +1,5 @@
 package com.bigthumb.honeytip.dto;
 
-import com.bigthumb.honeytip.domain.Category;
-import com.bigthumb.honeytip.domain.TipStatus;
-import com.bigthumb.honeytip.domain.User;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;

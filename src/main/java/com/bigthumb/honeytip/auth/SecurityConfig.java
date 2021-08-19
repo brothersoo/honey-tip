@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/").permitAll()
         .antMatchers("/auth/mypage").hasRole(UserType.MEMBER.toString())
         .antMatchers("/auth/modification").hasRole(UserType.MEMBER.toString())
-        .antMatchers("/tip/new").hasRole(UserType.MEMBER.toString())
+        .antMatchers("/tip/*/*").hasRole(UserType.MEMBER.toString())
         .antMatchers("/auth/signup").anonymous()
 
         /* Path, param settings for user authentication */

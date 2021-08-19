@@ -2,7 +2,6 @@ package com.bigthumb.honeytip.controller;
 
 import com.bigthumb.honeytip.domain.User;
 import com.bigthumb.honeytip.dto.UserModificationDto;
-import com.bigthumb.honeytip.exception.InvalidLoginCredentialException;
 import com.bigthumb.honeytip.repository.UserRepository;
 import com.bigthumb.honeytip.validator.SignupValidator;
 
@@ -65,7 +64,6 @@ public class AuthController {
       Model model) {
     User user = userRepository.findByUsername(requestUsername);
     model.addAttribute("nickname", user.getNickname());
-    model.addAttribute("username", user.getUsername());
 
     return "/auth/mypage";
   }
