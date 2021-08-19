@@ -85,7 +85,7 @@ public class TipController {
       return "/tips/updateTip";
     } catch (NoPermissionException e) {
       log.error(e.getMessage());
-      model.addAttribute("exceptionMessage", e.getMessage());
+      model.addAttribute("errorMessage", e.getMessage());
       return "/error/errorPage";
     }
   }
@@ -110,7 +110,7 @@ public class TipController {
       return "redirect:/tip/tips";
     } catch (NoPermissionException e) {
       log.error(e.getMessage());
-      model.addAttribute("exceptionMessage", e.getMessage());
+      model.addAttribute("errorMessage", e.getMessage());
       return "/error/errorPage";
     }
   }

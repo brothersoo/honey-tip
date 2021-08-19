@@ -2,6 +2,7 @@ package com.bigthumb.honeytip.controller;
 
 import com.bigthumb.honeytip.domain.User;
 import com.bigthumb.honeytip.dto.UserModificationDto;
+import com.bigthumb.honeytip.exception.NotYetException;
 import com.bigthumb.honeytip.repository.UserRepository;
 import com.bigthumb.honeytip.validator.SignupValidator;
 
@@ -80,12 +81,25 @@ public class AuthController {
 
   @PostMapping("/modificationProcess")
   public String modificationProcess(@AuthenticationPrincipal String requestUsername,
-      @ModelAttribute("modificationForm") UserModificationDto modificationForm, BindingResult result) {
-    userInfoModificationValidator.validateWithRequestUser(modificationForm, result, requestUsername);
+      @ModelAttribute("modificationForm") UserModificationDto modificationForm,
+      BindingResult result) {
+    userInfoModificationValidator.validateWithRequestUser(modificationForm, result,
+        requestUsername);
     if (result.hasErrors()) {
       return "/auth/modification";
     }
     userService.modifyUserInfo(requestUsername, modificationForm);
     return "redirect:/auth/mypage";
+  }
+
+  // TODO
+  @GetMapping("/quit")
+  public String quit(Model model) {
+    try {
+      throw new NotYetException("Service proceeding...");
+    } catch (NotYetException e) {
+      model.addAttribute("errorMessage", e.getMessage());
+      return "/error/errorPage";
+    }
   }
 }
