@@ -39,8 +39,10 @@ public class AuthController {
   }
 
   @PostMapping("/signupProcess")
-  public String signupProcess(@ModelAttribute("signupForm") UserSignupDto signupForm,
-      BindingResult result, Model model) {
+  public String signupProcess(
+      @ModelAttribute("signupForm") UserSignupDto signupForm,
+      BindingResult result,
+      Model model) {
     signupValidator.validate(signupForm, result);
     if (result.hasErrors()) {
       return "/auth/signup";
@@ -70,7 +72,9 @@ public class AuthController {
   }
 
   @GetMapping("/modification")
-  public String modificationForm(@AuthenticationPrincipal String requestUsername, Model model) {
+  public String modificationForm(
+      @AuthenticationPrincipal String requestUsername,
+      Model model) {
     User user = userRepository.findByUsername(requestUsername);
     UserModificationDto modificationForm = new UserModificationDto();
     modificationForm.setNickname(user.getNickname());
@@ -80,7 +84,8 @@ public class AuthController {
   }
 
   @PostMapping("/modificationProcess")
-  public String modificationProcess(@AuthenticationPrincipal String requestUsername,
+  public String modificationProcess(
+      @AuthenticationPrincipal String requestUsername,
       @ModelAttribute("modificationForm") UserModificationDto modificationForm,
       BindingResult result) {
     userInfoModificationValidator.validateWithRequestUser(modificationForm, result,
